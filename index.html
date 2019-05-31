@@ -1,0 +1,1529 @@
+
+
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<meta charset="utf-8">
+    	<title>Ultimate Chinese FLACS Exam Study Program (2019 Edition)</title>
+    	<style>
+    		#game {
+    			display: block;
+    			margin: 0 auto;
+    		}
+    	</style>
+  	</head>
+  	<body>
+		<canvas id="game" display="block" margin="0 auto"></canvas>
+  	</body>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\"></script>
+	<script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
+  	<script>
+
+  		var programCode = function(processingInstance) {
+    		with (processingInstance) {
+    			size(600, 600);
+    			frameRate(60);
+    			angleMode = "degrees";
+
+    			{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+angleMode = "degrees";
+
+/*
+Welcome to Chinese Studying!
+Made by Plourde27 Programming
+
+This is a helpful tool to study for the end-of-year FLACS exam.
+
+Credit to http://www.denisowski.org/Chinese/ICL1P2/ICL1P2.html for the textbook vocab list.
+The advanced vocabulary list was compiled from notes taken during class.
+
+Made by @Plourde27
+
+*/
+//khanacademy.org/cs/-/5733417664643072
+var delag = false; //set this to true if the program is being laggy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var incorind;
+var fino = false;
+var score = 90;
+var corCount = 0;
+var scoreColors = [0, 0, 0, 0, 0, 0, 0, 10, 20, 30, 40, 50, 60, 70, 80, 95, 110, 150, 190, 220, 255];
+var minTil;
+var questionCount;
+var mouseSel;
+var screenT = 0;
+var cor;
+var cols = [color(184, 22, 22), color(49, 150, 49), color(16, 16, 204), color(207, 207, 79), color(184, 44, 184), color(222, 121, 27)];
+var wd = ["Character Writing Practice", "Character Review (For Speaking Portion)", "Textbook Vocabulary List", "Advanced Vocabulary List", "Translation Practice", "Passage Reading Practice"];
+var counter = 0;
+var txt = "PLOURDE27".split("");
+var txt2 = "PRESENTS:".split("");
+var tk = 0;
+var dists = [0, 50, 105, 165, 220, 270, 330, 380, 430];
+var dists2 = [0, 50, 100, 150, 200, 260, 315, 365, 395];
+
+var sf = 1;
+var img = createGraphics(600, 600, JAVA2D);
+
+if (img) {
+    img.background(255, 255, 255);
+    for (var i = 0 ; i < 100 ; i++) {
+        var start = [random(0, 600), random(0, 600)];
+        var ang = random(0, 360);
+        var dir = [cos((Math.PI / 180) *ang), sin((Math.PI / 180) *ang)];
+        var sz = round(random(300, 60));
+        var inc = random(20, 40);
+        var col = color(random(0, 255), random(0, 255), random(0, 255));
+        img.noStroke();
+        img.fill(col);
+        for (var j = sz ; j > 0 ; j -= 1) {
+            img.ellipse(start[0] + dir[0] * j * inc, start[1] + dir[1] * j * inc, j, j);
+        }
+    }
+    img.filter(BLUR, 4);
+    img.fill(255, 255, 255, 200);
+    img.rect(0, 0, 600, 600);
+}
+
+var st = "";
+var st2 = "";
+
+/*if (!delag) {
+    var planets = [];
+    for (var i = 0 ; i < 50 ; i++) {
+        planets.push([random(0, 600), random(0, 600), random(50, 200), color(random(0, 255), random(0, 255), random(0, 255))]);
+    }
+    var coolBackground2 = createGraphics(600, 600, JAVA2D);
+    if (coolBackground2) {
+        coolBackground2.background(0, 0, 0);
+        for (var i = 0 ; i < planets.length ; i++) {
+            coolBackground2.fill(planets[i][3]);
+            coolBackground2.noStroke();
+            coolBackground2.ellipse(planets[i][0], planets[i][1], planets[i][2], planets[i][2]);
+        }
+        coolBackground2.filter(BLUR, 10);
+        coolBackground2.fill(255, 255, 255, 170);
+        coolBackground2.noStroke();
+        coolBackground2.rect(0, 0, 600, 600);
+    }
+    var prec = 5;
+    var colex = [];
+    for (var i = 0 ; i < 200 ; i ++) {
+        colex.push([random(0, 600), random(0, 600), random(50, 400)]);
+    }
+    var coolBackground = createGraphics(600, 600, JAVA2D);
+    if (coolBackground) {
+        coolBackground.angleMode = "degrees";
+        coolBackground.coolEllipse = function(x, y, r) {
+            coolBackground.resetMatrix();
+            coolBackground.pushMatrix();
+            coolBackground.translate(x, y);
+            coolBackground.scale(r / 300);
+            coolBackground.translate(-300, -300);
+            coolBackground.noStroke();
+            for (var i = 300 ; i > 0 ; i -= prec) {
+                coolBackground.fill(300 - (i * (255 / 300)), 150 - (i * (255 / 300)), 0);
+                coolBackground.ellipse(x, y, i, i);
+            }
+            coolBackground.stroke(0, 0, 0);
+            coolBackground.strokeWeight(5);
+            coolBackground.noFill();
+            coolBackground.arc(x - 180, y, 240, 300, -46, 46);
+            coolBackground.arc(x + 180, y, 240, 300, 134, 226);
+            coolBackground.line(x, y - 145, x, y + 145);
+            coolBackground.line(x - 145, y, x + 145, y);
+            coolBackground.popMatrix();
+        };
+        /*cyangle++;
+        cyangle = cyangle % 360;
+        cxf = cos((Math.PI / 180) *cyangle) * 50;
+        cyf = sin((Math.PI / 180) *cyangle) * 50;
+        pushMatrix();
+        translate(cxf, cyf);
+        image(coolbc, -200, -200);
+        popMatrix();
+        if (t) {
+            fill(0, 0, 0, 255 - t);
+            rect(300, 300, 600, 600);
+        }*/
+        /*for (var i = 0 ; i < colex.length ; i++) {
+            coolBackground.coolEllipse(colex[i][0], colex[i][1], colex[i][2]);
+        }
+        coolBackground.fill(0, 0, 125);
+        coolBackground.textSize(120);
+        coolBackground.textAlign(CENTER, CENTER);
+        coolBackground.text("EPIC\n3D\nBASKET\nBALL", 300, 300);
+        coolBackground.filter(BLUR, 3);
+        coolBackground.fill(255, 255, 255, 105);
+        coolBackground.noStroke();
+        coolBackground.rect(-2000, -2000, 10000, 10000);
+    }
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var done = false;
+var starredScene = false;
+var scroll = 0;
+var optionsInds;
+var pts = 0;
+var correct = 0;
+var points = 0;
+var textFrame = 0;
+var answer;
+var nodes = [[]];
+var testScene = 0, prevTestScene = 0;
+var keys = [];
+keyPressed = function() {
+    keys[keyCode] = true;
+};
+keyReleased = function() {
+    keys[keyCode] = false;
+};
+var starredCharacters = [];
+var chiA = ['饭桌', '课桌', '桌子', '躺椅', '沙发椅', '电椅', '特别', '帅', '如果', '附近', '虽然', '累', '黑色购物', '节', '淹水', '乌龟', '平面', '躺', '开机', '窗帘', '窗子', '日光灯', '桌灯', '壁炉', '月租', '已经', '公共汽车', '理由', '寒假', '难', '水下', '芭蕾', '高尔夫球', '电影院', '常常', '掉了', '酪梨', '歌唱', '比赛', '高压', '太太', '拿', '别', '邮局', '超市', '政客', '学习', '驾照', '身份证', '照片', '电子邮件', '久', '还好', '对了', '航站楼', '空气', '臭气', '希望', '休息', '蛋白', '食物', '假发', '假牙', '机会', '练习', '故宫', '那一个', '怒', '皮蛋', '烤箱', '学姐', '学妹', '学弟', '骗子', '沙拉', '问路', '社团', '忙', '耐性', '花生'];
+var pinA = ["fàn zhuō", "kè zhuō", "zhuō zi", "tǎng yǐ", "shā fā yǐ", "diàn yǐ", "tè bié", "shuài", "rú guǒ", "fù jìn", "suī rán", "lèi", "hēi sè gòu wù", "jié", "yān shuǐ", "wū guī", "píng miàn", "tǎng", "kāi jī", "chuāng lián", "chuāng zi", "rì guāng dēng", "zhuō dēng", "bì lú", "yuè zū", "yǐ jīng", "gōng gòng qì chē", "lǐ yóu", "hán jià", "nán", "shuǐ xià", "bā lěi", "gāo ěr fū qiú", "diàn yǐng yuàn", "cháng cháng", "diào", "lào lí", "gē chàng", "bǐ sài", "gāo yā", "tài tai", "ná", "biè", "yóu jú", "chāo shì", "zhèng kè", "xué xí", "jià zhào", "shēn fèn zhèng", "zhào piàn", "diàn zǐ yóu jiàn", "jiǔ", "hái hǎo", "duì le", "háng zhàn lóu", "kōng qì", "chòu qì", "xī wàng", "xiū xi", "dàn bái", "shí wù", "jiǎ fà", "jiǎ yá", "jī huì", "liàn xí", "gù gōng", "nà yī gè", "nù", "pí dàn", "kǎo xiāng", "xué jiě", "xué mèi", "xué dì", "piàn zi", "shā lā", "wèn lù", "shè tuán", "máng", "nài xìng", "huā shēng"];
+var engA = ['dining table', 'school desk', 'table', 'recliner chair', 'sofa chair', 'electric chair', 'especially', 'handsome', 'if', '(in the) vicinity', 'although', 'tired', 'Black Friday', 'festival', 'to be flooded', 'tortoise', 'flat surface', 'to recline', 'to start an engine', 'window curtains', 'window', 'fluorescent light', 'desk lamp', 'fireplace', 'Monthly rent', 'already', 'bus', 'reason', 'winter vacation', 'difficult (to...)', 'under the water', 'ballet (loanword)', 'golf', 'cinema', 'frequently', 'to lose (something)', 'avocado', 'to sing', 'competition (sports etc)', 'high pressure', 'wife', 'to take', 'other, don’t', 'post office', 'supermarket', 'politician', 'to learn', "driver's license", 'identity card', 'photograph', 'email', '(long) time', 'not bad', 'Correct!', 'airport terminal', 'air', 'stench', 'to wish for / to hope', 'rest', 'egg white', 'food', 'wig', 'false teeth', 'opportunity', 'to practice', 'former imperial palace', 'which one', 'anger', 'thousand-year old eggs', 'oven', 'senior or older female schoolmate', 'junior or younger female schoolmate', 'junior or younger male schoolmate', 'liar', 'salad (loanword)', 'to ask for directions', 'school club', 'busy', 'patience', 'peanut'];
+var allA = [chiA, pinA, engA];
+var cwd = ["chinese character", "pinyin", "english word"];
+var atis = [6, 6, 7, 5, 4, 1, 10, 6, 10, 8, 9, 8, 2, 5, 3, 5, 5, 6, 6, 4, 5, 3, 4, 3, 4, 10, 7, 8, 5, 9, 2, 1, 1, 5, 8, 8, 3, 6, 5, 3, 4, 8, 9, 7, 7, 3, 8, 3, 2, 6, 9, 5, 6, 5, 6, 4, 3, 10, 8, 2, 4, 1, 1, 6, 9, 4, 6, 3, 2, 4, 3, 3, 3, 4, 5, 4, 7, 8, 4, 3];
+var selA = round(random(-0.4999, atis.length - 0.5000001));
+var stc = false;
+var questionArr;
+var questionInd;
+var qNum = 0;
+var sched = [];
+var scheds = [[1, 2], [2, 1], [1, 3], [3, 1]];
+var setChar = function() {
+    selA = round(random(-0.4999, atis.length - 0.5000001));
+    while (atis[selA] < minTil) {
+        selA = round(random(-0.4999, atis.length - 0.5000001));
+    }
+    var arr = [selA];
+    for (var i = 0 ; i < 4 ; i++) {
+        var sC = round(random(-0.4999, atis.length - 0.5000001));
+        while (arr.indexOf(sC) !== -1) {
+            sC = round(random(-0.4999, atis.length - 0.5000001));
+        }
+        arr.push(sC);
+    }
+    arr.sort(function(a, b) { return 0.5 - Math.random(); });
+    questionArr = arr;
+    questionInd = arr.indexOf(selA);
+    sched = scheds[round(random(-0.49999, scheds.length - 0.5000001))];
+};
+
+var characters = ['天气', '比', '下雪', '约', '公园', '滑冰', '会', '刚才', '网上', '预报', '更', '不但…﹐而且…', '暖和', '冷', '办', '碟', '那么', '好玩儿', '出去', '非常', '糟糕', '下雨', '又', '面试', '回去', '冬天', '夏天', '热', '春天', '秋天', '舒服', '加州', '饭馆(儿)', '好像', '位子', '服务员', '服务', '桌子', '点菜', '盘', '饺子', '素', '家常', '豆腐', '放', '肉', '碗', '酸辣汤', '酸', '辣', '汤', '味精', '盐', '白菜', '刚', '卖完', '完', '青菜', '冰茶', '冰', '渴', '些', '够', '饿', '上菜', '师傅', '好吃', '糖醋鱼', '糖', '醋', '甜', '酸', '极', '红烧', '牛肉', '牛', '鱼', '凉拌', '黄瓜', '米饭', '忘', '带', '饭卡', '错', '清楚', '没关系', '上海', '上', '中心', '听说', '运动', '场', '旁边', '远', '离', '近', '活动', '中间', '书店', '地方', '里边', '过', '中国城', '成', '地图', '拿', '次', '从', '一直', '往', '南', '过', '路口', '西', '拐', '哎', '东', '北', '前', '红绿灯', '灯', '右', '左', '前面', '日文', '东京', '日本', '舞会', '表姐', '中学', '送', '礼物', '本', '饮料', '水果', '把', '花', '爱', '苹果', '梨', '西瓜', '住', '重', '接', '楼', '王红', '钟头', '以为', '聪明', '用功', '暑期', '班', '长', '可爱', '去年', '属', '狗', '脸', '圆', '眼睛', '鼻子', '嘴', '像', '长大', '一定', '蛋糕', '最', '海轮', '汤姆', '病人', '病', '医院', '看病', '肚子', '疼死', '疼', '死', '夜里', '好几', '厕所', '把', '冰箱', '发烧', '躺下', '躺', '检查', '吃坏', '怀', '打针', '针', '药', '片', '遍', '最好', '小时', '办法', '感冒', '生病', '身体', '痒', '过敏', '药店', '健康', '保险', '赶快', '要不然', '越来越', '上次', '休息', '懒', '再说', '乱', '同', '印象', '成', '演', '费', '力气', '就', '俩', '后天', '一言为定', '记得', '想起来', '号码', '搬', '打扫', '扫', '整理', '房间', '旅行', '电', '吵', '连', '做饭', '报纸', '广告', '附近', '套', '公寓', '出租', '走路', '分钟', '卧室', '厨房', '卫生间', '客厅', '家具', '可能', '一房一厅', '干净', '沙发', '饭桌', '椅子', '书桌', '书架', '那里', '安静', '房租', '元', '美元', '人民币', '人民', '币', '差不多', '费', '押金', '当', '还', '另外', '准', '养', '宠物', '兴趣', '当然', '胖', '怕', '简单', '跑步', '跑', '难受', '网球', '拍', '篮球', '游泳', '危险', '淹死', '愿意', '上大学', '为了', '提高', '水平', '足球', '比赛', '国际', '美式', '应该', '脚', '踢', '手', '抱', '压', '被', '担心', '棒', '运动服', '半天', '马上', '放假', '放', '假', '公司', '实习', '打工', '计划', '暑假', '打算', '父母', '首都', '政治', '文化', '名胜古迹', '有名', '导游', '护照', '顶', '签证', '旅行社', '长成', '香港', '台北', '初', '单程', '往返', '航空', '查', '航班', '千', '直飞', '打折', '转机', '靠', '窗户', '走道', '份', '素餐', '旅馆', '租', '中国国际航空公司', '西北航空公司', '行李', '托运', '包', '箱子', '超重', '超', '登机牌', '牌', '登机口', '口', '哭', '地', '照顾', '起飞', '小心', '一路平安', '叔叔', '阿姨', '欢迎', '瘦', '爷爷', '奶奶', '烤鸭', '首都机场'];
+var starredPinyin = [];
+var pinyin = ['tiānqì', 'bǐ', 'xià xuě', 'yuē', 'gōngyuán', 'huá bīng', 'huì', 'gāngcái', 'wǎng shang', 'yùbào', 'gèng', 'búdàn ..., érqiě ....', 'nuānhuo', 'lěng', 'bàn', 'dié', 'nàme', 'hǎowánr', 'chū qu', 'fēicháng', 'zāogāo', 'xià yǔ', 'yòu', 'miànshì', 'huí qu', 'dōngtiān', 'xiàtiān', 'rè', 'chūntiān', 'qiūtiān', 'shūfu', 'Jiāzhōu', 'fànguǎn(r)', 'hǎoxiàng', 'wèizi', 'fúwùyuán', 'fúwù', 'zhuōzi', 'diǎn cài', 'pán', 'jiǎozi', 'sù', 'jiācháng', 'dòufu', 'fàng', 'ròu', 'wǎn', 'suānlàtāng', 'suān', 'là', 'tāng', 'wèijīng', 'yán', 'báicài', 'gāng', 'mài wán', 'wán', 'qīngcài', 'bīngchá', 'bīng', 'kě', 'xiē', 'gòu', 'è', 'shàng cài', 'shīfu', 'hǎochī', 'tángcùyú', 'táng', 'cù', 'tián', 'suān', 'jí', 'hóngshāo', 'niúròu', 'niú', 'yú', 'liángbàn', 'huánggua', 'mǐfàn', 'wàng', 'dài', 'fànkǎ', 'cuò', 'qīngchu', 'mēi guānxi', 'Shànghǎi', 'shàng', 'zhōngxīn', 'tīngshuō', 'yùndòng', 'chǎng', 'pángbiān', 'yuǎn', 'lí', 'jìn', 'huódòng', 'zhōngjiān', 'shūdiàn', 'dìfang', 'lǐbian', 'guo', 'Zhōngguóchéng', 'chéng', 'dìtú', 'ná', 'cì', 'cóng', 'yīzhí', 'wǎng', 'nán', 'guò', 'lùkǒu', 'xī', 'guǎi', 'āi', 'dōng', 'běi', 'qián', 'hónglǜdēng', 'dēng', 'yòu', 'zuǒ', 'qiánmian', 'Rìwén', 'Dōngjīng', 'Rìběn', 'wǔhuì', 'biǎojiě', 'zhōngxué', 'sòng', 'lǐwù', 'běn', 'yǐnliào', 'shuǐguǒ', 'bǎ', 'huā', 'ài', 'píngguǒ', 'lí', 'xīgua', 'zhù', 'zhòng', 'jiē', 'lóu', 'Wáng Hóng', 'zhōngtóu', 'yǐwéi', 'cōngming', 'yònggōng', 'shǔqī', 'bān', 'zhǎng', 'kě’ài', 'qùnián', 'shǔ', 'gǒu', 'liǎn', 'yuán', 'yǎnjing', 'bízi', 'zuǐ', 'xiàng', 'zhǎng dà', 'yídìng', 'dàngāo', 'zuì', 'Hǎilún', 'Tāngmǔ', 'bìngrén', 'bìng', 'yīyuàn', 'kàn bìng', 'dùzi', 'téng sǐ', 'téng', 'sǐ', 'yèli', 'hǎo jǐ', 'cèsuǒ', 'bǎ', 'bīngxiāng', 'fā shāo', 'tǎng xia', 'tǎng', 'jiǎnchá', 'chī huài', 'huài', 'dǎ zhēn', 'zhēn', 'yào', 'piàn', 'biàn', 'zuìhǎo', 'xiǎoshí', 'bànfǎ', 'gǎnmào', 'shēng bìng', 'shēntǐ', 'yǎng', 'guòmǐn', 'yàodiàn', 'jiànkāng', 'bǎoxiǎn', 'gǎnkuài', 'yàobùrán', 'yuè lái yuè', 'shàng cì', 'xiūxi', 'lǎn', 'zàishuō', 'luàn', 'tóng', 'yìnxiàng', 'chéng', 'yǎn', 'fèi', 'lìqi', 'jiù', 'liǎ', 'hòutiān', 'yì yán wéi dìng', 'jìde', 'xiǎng qi lai', 'hàomǎ', 'bān', 'dǎsǎo', 'sǎo', 'zhěnglǐ', 'fángjiān', 'lǚxíng', 'diàn', 'chǎo', 'lián', 'zuò fàn', 'bàozhǐ', 'guǎnggào', 'fùjìn', 'tào', 'gōngyù', 'chūzū', 'zǒu lù', 'fēnzhōng', 'wòshì', 'chúfáng', 'wèishēngjiān', 'kètīng', 'jiājù', 'kěnéng', 'yì fáng yì tīng', 'gānjìng', 'shāfā', 'fànzhuō', 'yǐzi', 'shūzhuō', 'shūjià', 'nàli', 'ānjìng', 'fángzū', 'yuán', 'Měiyuán', 'Rénmínbì', 'rénmín', 'bì', 'chàbuduō', 'fèi', 'yājīn', 'dāng', 'huán', 'lìngwài', 'zhǔn', 'yǎng', 'chǒngwù', 'xìngqù', 'dāngrán', 'pàng', 'pà', 'jiǎndān', 'pǎo bù', 'pǎo', 'nánshòu', 'wǎngqiú', 'pāi', 'lánqiú', 'yóu yǒng', 'wēixiǎn', 'yān sǐ', 'yuànyì', 'shàng dàxué', 'wèile', 'tígāo', 'shuǐpíng', 'zúqiú', 'bǐsài', 'guójì', 'Měishì', 'yīnggāi', 'jiǎo', 'tī', 'shǒu', 'bào', 'yā', 'bèi', 'dān xīn', 'bàng', 'yùndòngfú', 'bàntiān', 'mǎshàng', 'fàng jià', 'fàng', 'jià', 'gōngsī', 'shíxí', 'dā gōng', 'jìhuà', 'shūjià', 'dǎsuàn', 'fùmǔ', 'shǒudū', 'zhèngzhì', 'wénhuà', 'míngshèng gǔjì', 'yǒumíng', 'dǎoyóu', 'hùzhào', 'dìng', 'qiānzhèng', 'lǚxíngshè', 'Chángchéng', 'Xiānggǎng', 'Táiběi', 'chū', 'dānchéng', 'wǎngfǎn', 'hángkōng', 'chá', 'hángbān', 'qiān', 'zhí fēi', 'dǎ zhé', 'zhuǎn jī', 'kào', 'chuānghu', 'zǒudào', 'fèn', 'sùcān', 'lǚguǎn', 'zū', 'Zhōngguó Guójì Hángkōng Gōngsī', 'Xīběi Hángkōng Gōngsī', 'xíngli', 'tuōyùn', 'bāo', 'xiāngzi', 'chāozhòng', 'chāo', 'dēngjīpái', 'pái', 'děngjīkǒu', 'kǒu', 'kū', 'de', 'zhàogu', 'qǐfēi', 'xiǎoxīn', 'yí lù píng’ān', 'shūshu', 'āyí', 'huānyíng', 'shòu', 'yéye', 'nǎinai', 'kǎoyā', 'Shǒudū Jīchǎng'];
+
+var starredEnglish = [];
+var starred = [];
+for (var i = 0 ; i < characters.length ; i++) {
+    starred.push(false);
+}
+var english = ['weather', '(comparison marker); to compare', 'to snow', 'to make an appointment', 'park', 'to ice skate', 'will', 'just now, a moment ago', 'on the internet', 'to forecast', 'even more', 'not only ... but also ...', 'warm', 'cold', 'to handle, to do', 'disc, small plate, dish, saucer', '(indicating degree) so, such', 'fun, amazing, interesting', 'to go out', 'very, extremely, exceedingly', 'in a terrible mess, how terrible', 'to rain', 'again', 'to interview; interview', 'to go back, to retun', 'winter', 'summer', 'hot', 'spring', 'autumn, fall', 'comfortable', 'California', 'restaurant', 'to seem, to be like', 'seat', 'waiter, attendant', 'to serve, to provide service', 'table', 'to order food', 'plate, dish', 'dumplings (with vegetable and,or meat filling)', 'vegetarian, made from vegetables', 'home-style', 'tofu, bean curd', 'to put, to place', 'meat', 'bowl', 'hot and sour soup', 'sour', 'spicy, hot', 'soup', 'monosodium glutamate (MSG)', 'salt', 'bok choy', 'just', 'to be sold out', 'finished', 'green or leafy vegetable', 'iced tea', 'ice', 'thirsty', '(measure word for an indefnite amount), some', 'enough', 'hungry', 'to serve food', 'master worker', 'delicious', 'fish in sweet and sour sauce', 'sugar', 'vinegar', 'sweet', 'sour', 'extremely', 'to braise in soy sauce', 'beef', 'cow, ox', 'fish', '(of food) cold "blended", cold tossed', 'cucumber', 'cooked rice', 'to forget', 'to bring, to take, to carry, to come with', 'meal card', 'wrong', 'clear', "it doesn't matter", 'Shanghai', 'to go (colloquial)', 'center', 'to be told, to hear of', 'sports', 'field', 'side', 'far', 'away from', 'near', 'activity', 'middle', 'bookstore', 'place', 'inside', '(particle used after a verb to indicate a past experience)', 'Chinatown', 'town, city', 'map', 'to take, to get', '(measure word for frequency)', 'from', 'straight, continuously', 'towards', 'south', 'to pass', 'intersection', 'west', 'to turn', '(exclamatory particle to express surprise or dissatisfaction', 'east', 'north', 'forward, ahead', 'traffic light', 'light', 'right', 'left', 'ahead, in front of', 'Japanese (language)', 'Tokyo', 'Japan', 'dance party, ball', 'older female cousin', 'middle school, secondary school', 'to give as a gift', 'gift, present', '(measure word for books)', 'beverage', 'fruit', '(measure word for bunches of things, and chairs)', 'flower', 'to love, to like, to be fond of', 'apple', 'pear', 'watermelon', 'to live (in a certain place)', 'heavy, serious', 'to catch, to meet, to welcome', 'multi-storied building, floor (of a multi-level building)', '(a personal name)', 'hour', 'to assume erroneously', 'smart, bright, clever', 'hard-working, diligent, studious', 'summer term', 'class', 'to grow, to appear', 'cute, lovable', 'last year', 'to belong to', 'dog', 'face', 'round', 'eye', 'nose', 'mouth', 'to be like, to look like, to take after', 'to grow up', 'certain(ly), definite(ly)', 'cake', 'most, (of a superlative degree) -est', 'Helen', 'Tom', 'patient', 'illness, to become ill', 'hospital', 'to see a doctor, (of a doctor) to see a patient', 'belly, abdomen', 'really painful', 'aching', 'to die, (a complement indicating an extreme degree)', 'at night', 'quite a few', 'restroom, toilet', '(indicating a thing disposed of)', 'refrigerator', 'to have a fever', 'to lie down', 'to lie', 'to examine', 'to get sick because of bad food', 'bad', 'to get an injection', 'needle', 'medicine', '(measure word for tablet, slice)', '(measure word for complete courses of an action or instances of an action)', 'had better', 'hour', 'method, way (of doing sth)', 'to have a cold', 'to get sick', 'body, health', 'itchy', 'to be allergic to', 'pharmacy', 'healthy, health', 'insurance', 'right away, quickly, in a hurry', 'otherwise', 'more and more', 'last time', 'to take a break, to rest', 'lazy', 'moreover', 'randomly, arbitrarily, messily', 'same, alike', 'impression', 'to become', 'to show (a film), to perform', 'to spend, to take (effort)', 'strength, effort', 'just, only (indicating a small number)', 'two (colloquial)', 'the day after tomorrow', "that settles it, that's settled, it's decided", 'to remember', 'to remember, to recall', 'number', 'to move', 'to clean up (a room, apartment, or house)', 'to sweep', 'to put in order', 'room', 'to travel', 'electricity', 'to quarrel, noisy', 'even', 'to cook, to prepare a meal', 'newspaper', 'advertisement', 'vicinity, neighborhood, nearby area', '(measure word for suite or set)', 'apartment', 'to rent out', 'to walk', 'minute', 'bedroom', 'kitchen', 'bathroom', 'living room', 'furniture', 'maybe, posible', 'one bedroom and one living room', 'clean', 'sofa', 'dining table', 'chair', 'desk', 'bookcase, bookshelf', 'there', 'quiet', 'rent', '(measure for the basic Chinese monetary unit), yuan', 'U.S. currency', 'renminbi (RMB, Chinese currency)', 'the people', 'currency', 'almost, nearly, similar', 'fee, expenses', 'security deposit', 'to serve as, to be', 'to return (something)', 'furthermore, in addition', 'to allow, to be allowed', 'to raise', 'pet', 'interest', 'of course', 'fat', 'to fear, to be afraid of', 'simple', 'to jog', 'to run', 'hard to bear, uncomfortable', 'tennis', 'racket', 'basketball', 'to swim', 'dangerous', 'to drown', 'to be willing', 'to attend college or university', 'for the sake of', 'to improve, to raise, to heighten', 'level, standard', 'soccer, football', 'game, match, competition; to compete', 'international', 'American-style', 'should, ought to', 'foot', 'to kick', 'hand', 'to hold or carry in the arms', 'to press, to hold down, to weight down', 'by', 'to worry', 'fantastic, super (colloquial)', 'sportswear, athletic clothing', 'half a day, a long time', 'immediately, right away', 'go on vacation, have time off', 'to let go, to set free', 'vacation, holiday', 'company', 'to intern', 'to work at a temporary job (often part time)', 'plan; to plan', 'summer vacation', 'to plan; plan', 'parents, father and mother', 'capital city', 'politics', 'culture', 'famous scenic spots and historic sites', 'famous, well-known', 'tour guide', 'passport', 'to reserve, to book (a ticket,  hotel room, etc.)', 'visa', 'travel agency', 'the Great Wall', 'Hong Kong', 'Taipei', 'beginning', 'one-way trip', 'make a round trip, go there and back', 'aviation', 'to check, to look into', 'scheduled flight', 'thousand', 'fly directly', 'to sell at a discount, to give a discount', 'change places', 'to lean on, to lean against, to be next to', 'window', 'aisle', '(measure word for meal order, job)', 'vegetarian meal', 'hotel', 'to rent', 'Air China', 'Northwest Airlines', 'luggage', 'to check (luggage)', 'bag, sack, bundle, package', 'suitcase, box', 'to be overweight (of luggage, freight, etc.)', 'to exceed, to surpass', 'boarding pass', 'plate, tablet, card', 'boarding gate', 'opening, entrance, mouth', 'to cry, to weep', '(particle to link adverbial and verb)', 'to look after, to care of, to attend to', '(of airplanes) to take off', 'to be careful', 'have a good trip, bon voyage', 'uncle', 'aunt', 'to welcome', 'thin, slim (usually of a person or animal), lean', 'paternal grandfather', 'paternal grandmother', 'roast duck', 'the Capital Airport (in Beijing)'];
+
+var part1questions = ['你看,公共汽车来了。', '白老师现在不在办公室,可是他明天会在。', '你明年做什么?', '他说他晚上会给你发短信。', '前几天我很不高兴,昨天考试考得很好,我高兴点儿了。', '老师,请您说话说得慢一点儿。', '他昨天复习了第八课的语法,今天又复习了。', '我上个周末去跳舞了,昨天我又去跳舞了。', '明天学校开会,你去不去?', '喜欢是喜欢,可是这张照片太小了。', '妈妈做菜一点儿味精都不放。', '爸爸告诉妈妈做菜的时候少放盐,多放点 儿糖。', '你知道王朋在哪儿吗?', '太好了,这个字你写对了。', '再来一个!', '来一盘糖醋鱼,一碗酸辣汤,和一碗米饭。', '我弟弟没有我高。', '他姐姐没有他妹妹那么喜欢买东西。', '我没有她那么喜欢刷卡。', '今天比昨天热吗?', '今天没有昨天热。', '是吗?我觉得这篇课文没有那篇长。', '老师,您再说说什么时候用“了”,好吗?', '妈,您看看,我这样写对不对?', '以前我们见过面,可是没说过话。', '我以前去过中国城,知道怎么走。', '她想看看我的新手机。', '我昨天给他打电话的时候,他正在做功课呢。', '老师给我们的功课', '请你跳舞的那个人', '你们是什么时候去的?', '你们是怎么去的?', '上个周末看的。', '你这条裤子真好看。是在哪儿买的?', '在学生餐厅吃的。', '今天的功课,我还没写完。', '今天热死了。', '我饿死了。', '知道了这件事,他高兴死了。', '是吗?昨天我也找了王医生三次。', '我昨天找了他两次,他都不在。', '他一回家就写起信来。', '你把这个字写错了。', '把这杯咖啡喝了!', '表姐考试考得越来越糟糕。', '你为什么不去纽约?', '我不喜欢今天晚上的舞会,音乐不好,再说 人也太少。', '这是王先生,他不但是我的老师,而且也是 我的朋友。'];
+var part1answers = ['Look, the bus is here.', 'Teacher Bai is not in the office now, but he will be tomorrow.', 'What will you do next year?', 'He said he will send you a text message this evening.', 'I was very unhappy a few days ago. I did very well on the exam yesterday. I am a little bit happier now.', 'Teacher, would you please speak a little bit more slowly?', 'He reviewed the grammar in Lesson Eight yesterday, and he reviewed it again today.', 'I went dancing last weekend. Yesterday I went dancing again.', 'There is a meeting at school tomorrow. Will you go?', 'I like it, but this picture is too small.', 'Mom doesn’t use any MSG in her cooking.', 'Dad asked Mom to add less salt and more sugar when she cooks.', 'Do you know where Wang Peng is?', 'Great! You wrote this character correctly.', 'Encore!', 'Give me a plate of sweet and sour fish, a bowl of hot and sour soup, and a bowl of rice, please.', 'My younger brother is not as tall as I am.', 'His older sister does not like shopping as much as his younger sister does.', 'I don’t like to use credit cards as much as she does.', 'Is today hotter than yesterday?', 'Today is not as hot as yesterday.', 'Really? I think this text is not as long as that one.', 'Teacher, would you say a bit more about when to use “le”, please?', 'Mom, take a look—did I write this correctly or not?', 'We’ve met before, but we’ve never spoken to each other.', 'I’ve been to Chinatown before. I know how to get there.', 'She wants to take a look at my new cell phone.', 'When I called him yesterday, he was right in the middle of doing his homework.', 'the homework the teacher assigned us', 'that person who asked you to dance', 'When did you go?', 'How did you go?', 'I watched it last weekend.', 'These pants of yours look great. Where did you get them?', 'In the student cafeteria.', 'I’m still not done with today’s homework.', 'It’s awfully hot today.', 'I’m starving.', 'He was tickled pink when he learned about this.', 'Is that right? I also went looking for Dr. Wang three times yesterday.', 'Yesterday I went looking for him twice, but he was not in either time.', 'He began to write a letter as soon as he got home.', 'You wrote this character incorrectly.', 'Finish up this cup of coffee!', 'My cousin is doing worse and worse on her exams.', 'Why aren’t you going to New York?', 'I didn’t like the dance party tonight. The music was lousy. Besides, there were too few people there.', 'This is Mr. Wang. He is not only my teacher but also my friend.'];
+var oops = [[1, 2, 3, 4, 5, 6, 7, 8], [10, 15, 20, 25, 30, 35, 40]];
+var mouseSel = [3, 3];
+var inds = [];
+var answers = [];
+var preset = round(random(0.5, 2.49999));
+
+var goodBackground = function() {
+    background(255, 255, 255);
+    /*if (!delag) {
+        image(coolBackground2, 0, 0);
+        fill(255, 255, 255, 190);
+        rect(300, 300, 600, 600);
+    }
+    else {
+        background(255, 255, 255);
+    }*/
+};
+var options;
+var mip = false;
+mousePressed = function() {
+    mip = true;
+};
+mouseClicked = function() {
+    mip = false;
+    clicked = true;
+};
+mouseDragged = function() {
+    clicked = true;
+    nodes[nodes.length-1].push([mouseX, mouseY]);
+};
+mouseReleased = function() {
+    nodes.push([]);
+    nodes[nodes.length - 2].pop();
+};
+var drawStar = function(x, y, filledIn) {
+    if (filledIn) {
+        noStroke();
+        fill(235, 220, 144);
+    }
+    else {
+        noFill();
+        stroke(125, 125, 125);
+        strokeWeight(1);
+    }
+    beginShape();
+    for (var i = -90 ; i <= 270 ; i += 72) {
+        if (!filledIn) {
+            vertex(x + cos((Math.PI / 180) *i) * 15, y + sin((Math.PI / 180) *i) * 15 + 2);
+            vertex(x + cos((Math.PI / 180) * (i + 36)) * 5, y + sin((Math.PI / 180) * (i + 36)) * 5 + 2);
+        }
+        else {
+            vertex(x + cos((Math.PI / 180) *i) * 17, y + sin((Math.PI / 180) *i) * 17 + 2);
+            vertex(x + cos((Math.PI / 180) *(i + 36)) * 7, y + sin((Math.PI / 180) * (i + 36)) * 7 + 2);
+        }
+    }
+    endShape();
+    stroke(0, 0, 0);
+    fill(0, 0 ,0);
+};
+var scene = "Menu";
+var scenes = ["StartCharacter", "ObscureStart", "Vocabulary", "ObscureList", "Translation", "Reading"];
+var clicked = false;
+var pressed = false;
+textAlign(CENTER, CENTER);
+rectMode(CENTER);
+var ind = round(random(-0.4, pinyin.length - 0.6));
+var ch = pinyin[ind];
+var questions = [];
+var answers = [];
+var arr = ['P', 'L', 'O', 'U', 'R', 'D', 'E', '2', '7'];
+var arr2 = ['P', 'R', 'O', 'G', 'R', 'A', 'M', 'M', 'I', 'N', 'G'];
+var arr3 = ['P', 'R', 'E', 'S', 'E', 'N', 'T', 'S', ':'];
+var shuffle = function(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+};
+draw = function() {
+
+    cursor(ARROW);
+    textFont(createFont("Avenir"));
+    switch (scene) {
+        case "Logo":
+            background(255, 255, 255);
+            translate(300, 300);
+            scale(sf);
+            translate(-300, -300);
+            image(img, 0, 0);
+            textSize(70);
+            fill(19, 19, 194);
+            for (var i in st) {
+                text(st[i], 50 + dists[i], 430 - tk);
+            }
+            fill(12, 130, 89);
+            for (var i in st2) {
+                text(st2[i], 150 + dists2[i], 520 - tk);
+            }
+            textSize(400);
+            fill(19, 19, 194);
+            textAlign(LEFT, CENTER);
+            text(txt[counter], dists[st.length] + 20, 330);
+            fill(12, 130, 89);
+            if (counter >= txt.length - 1) {
+                text(txt2[counter - txt.length + 1], dists2[st2.length] + 100, 400);
+            }
+            textAlign(CENTER, CENTER);
+            if (frameCount < 10 * txt.length) {
+                if (frameCount % 10 === 0) {
+                    st += txt[counter];
+                    counter += 1;
+                }
+            }
+            else if (frameCount < 10 * (txt.length + txt2.length)) {
+                st = "PLOURDE27";
+                if (frameCount % 10 === 0) {
+                    st2 += txt2[counter - txt.length + 1];
+                    counter += 1;
+                }
+            }
+            else {
+                tk += 5;
+                if (tk > 176) {
+                    tk -= 5;
+                    sf *= 1.03;
+                    if (sf > 18) {
+                        scene = "Menu";
+                    }
+                }
+            }
+            break;
+        case "Menu":
+            scroll = 0;
+            textAlign(CENTER, CENTER);
+            cursor(ARROW);
+            background(255, 255, 255);
+            //goodBackground();
+            fill(0, 0, 0);
+            textSize(80);
+            textFont(createFont("Skia"));
+            text("CHINESE\nSTUDYING", 300, 100);
+            textFont(createFont("Avenir"));
+            fill(200, 200, 200, 120);
+            noStroke();
+            for (var i = 0 ; i < 6 ; i++) {
+                if (mouseX > 30 && mouseX < 570 && mouseY > 197.5 + 65 * i && mouseY < 252.5 + 65 * i && i < 4) {
+                    cursor(HAND);
+                    translate(300, 225 + 65 * i);
+                    scale(1.2);
+                    translate(-300, -225 - 65 * i);
+                    if (clicked) {
+                        scene = scenes[i];
+                    }
+                }
+                fill(200, 200, 200, 120);
+
+                rect(300, 225 + 65 * i, 540, 55, 5);
+
+                fill(cols[i]);
+
+                textSize(27);
+                text(wd[i], 300, 225 + 65 * i);
+                if (i >= 4) {
+                    fill(200, 200, 200, 200);
+                    rect(300, 225 + 65 * i, 540, 55, 5);
+                    fill(0, 0, 0, 100);
+                    translate(300, 225 + 65 * i);
+                    rotate(2 * (Math.PI / 180));
+                    translate(-300, -225 - 65 * i);
+                    text("COMING SOON", 300, 225 + 65 * i);
+                }
+                resetMatrix();
+            }
+            resetMatrix();
+            /*if (!delag) {
+                fill(125, 125, 125, 155);
+                if (mouseX > 30 && mouseX < 130 && mouseY > 535 && mouseY < 585) {
+                    cursor(HAND);
+                    fill(155, 155, 155, 155);
+                    if (clicked) {
+                        delag = true;
+                    }
+                }
+
+                rect(80, 560, 100, 50, 20);
+                fill(0, 0, 0);
+                textSize(18);
+                text("Anti-lag", 80, 560);
+            }
+            fill(125, 125, 125, 155);
+            noStroke();
+            if (mouseX > 85 && mouseX < 235 && mouseY > 270 && mouseY < 330) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+
+                    scene = "StartCharacter";
+                    starredScene = false;
+                    done = false;
+                }
+            }
+            rect(160, 300, 150, 60, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 365 && mouseX < 515 && mouseY > 270 && mouseY < 330) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "About";
+                }
+            }
+            rect(440, 300, 150, 60, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 85 && mouseX < 235 && mouseY > 370 && mouseY < 430) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+
+                    scene = "TestStart";
+                    questions = [];
+                    answers = [];
+                    inds = [];
+                    var testInd;
+                    for (var i = 0 ; i < 20 ; i++) {
+                        var found = false;
+                        while (found === false) {
+                            testInd = round(random(-0.4, part1questions.length - 0.6));
+                            while (testInd > part1questions.length - 1) {
+                                testInd = round(random(-0.4, part1questions.length - 0.6));
+                            }
+                            var ff = false;
+                            for (var j = 0 ; j < inds.length ; j++) {
+                                if (testInd === inds[j]) {
+                                    ff = true;
+                                }
+                            }
+                            if (!ff) {
+                                found = true;
+                                inds.push(testInd);
+                                if (i < 10) {
+                                    questions.push(part1questions[testInd]);
+                                    answers.push(part1answers[testInd]);
+                                }
+                                else {
+                                    questions.push(part1answers[testInd]);
+                                    answers.push(part1questions[testInd]);
+                                }
+                            }
+                        }
+                    }
+                    for (var i = 0 ; i < 20 ; i++) {
+                        var found = false;
+                        while (found === false) {
+                            testInd = round(random(-0.4, english.length - 0.6));
+                            while (testInd > english.length - 1) {
+                                testInd = round(random(-0.4, english.length - 0.6));
+                            }
+                            var ff = false;
+                            for (var j = 0 ; j < inds.length ; j++) {
+                                if (testInd === inds[j]) {
+                                    ff = true;
+                                }
+                            }
+                            if (!ff) {
+                                found = true;
+                                inds.push(testInd);
+                                if (i < 10) {
+                                    questions.push(characters[testInd]);
+                                    answers.push(english[testInd]);
+                                }
+                                else {
+                                    questions.push(english[testInd]);
+                                    answers.push(characters[testInd]);
+                                }
+                            }
+                        }
+                    }
+                    optionsInds = [inds[testScene]];
+                    if (testScene < 10) {
+                        //text("Translate the following sentence into English:", 300, 140);
+                        options = [part1answers[inds[testScene]]];
+                    }
+                    else if (testScene < 20) {
+                        //text("Translate the following sentence into Chinese:", 300, 140);
+                        options = [part1questions[inds[testScene]]];
+                    }
+                    else if (testScene < 30) {
+                        //text("Translate the following character(s) into English:", 300, 140);
+                        options = [english[inds[testScene]]];
+                    }
+                    else {
+                        //text("Translate the following character(s) into Chinese:", 300, 140);
+                        options = [characters[inds[testScene]]];
+                    }
+                    var testInd2;
+                    for (var i = 0 ; i < 3 ; i++) {
+                        var found = false;
+                        while (found === false) {
+                            testInd2 = round(random(-0.4, part1questions.length - 0.6));
+                            var ff = false;
+                            for (var j = 0 ; j < optionsInds.length ; j++) {
+                                if (testInd2 === optionsInds[j]) {
+                                    ff = true;
+                                }
+                            }
+                            if (!ff) {
+                                found = true;
+                                optionsInds.push(testInd2);
+                                options.push(part1answers[testInd2]);
+                            }
+                        }
+                    }
+                    var options2 = [[options[0], 0], [options[1], 1], [options[2], 2], [options[3], 3]];
+                    options = options2;
+                    options = shuffle(options);
+
+                }
+            }
+            rect(160, 400, 150, 60, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 365 && mouseX < 515 && mouseY > 370 && mouseY < 430) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Vocabulary";
+                    scroll = 0;
+                }
+            }
+            rect(440, 400, 150, 60, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 225 && mouseX < 375 && mouseY > 470 && mouseY < 530) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "StarredCharacters";
+                }
+            }
+            rect(300, 500, 150, 60, 20);
+            fill(0, 0, 0);
+            textSize(20);
+            fill(55, 0, 0);
+            text("Character\nWriting", 160, 300);
+            textSize(30);
+            fill(0, 100, 0);
+            text("About", 440, 300);
+            fill(0, 0, 100);
+            text("Test", 160, 400);
+            fill(100, 100, 0);
+            text("Vocabulary", 440, 400);
+            fill(155, 0, 155);
+            textSize(20);
+            text("Character\nReview", 300, 500);*/
+            break;
+        case "StarredCharacters":
+            if (starredEnglish.length === 0) {
+                cursor(ARROW);
+                goodBackground();
+                fill(0, 0, 0);
+                textSize(40);
+                text("You have no\nstarred characters.", 300, 120);
+                textSize(25);
+                text("Star a character in the character writing\nor vocabulary sections.", 300, 300);
+                textSize(20);
+                text("Click to return to the menu.", 300, 500);
+                if (clicked) {
+                    scene = "Menu";
+                }
+            }
+            else {
+                scene = "StartCharacter";
+                ch = starredPinyin[round(random(-0.4, starredPinyin.length - 0.6))];
+                done = false;
+                starredScene = true;
+            }
+            break;
+        case "About":
+            cursor(ARROW);
+            goodBackground();
+            fill(0, 0, 0);
+            textSize(50);
+            text("About this program", 300, 80);
+            textSize(30);
+            textAlign(LEFT, TOP);
+            textSize(22);
+            text("I made this program because I wanted a comprehensive, useful method for reviewing for the 9th grade Chinese final. I have included a character-writing interface for writing characters without help, practice tests to practice grammar and translation, and a vocabulary list that includes all words from lessons 11-15 for open-ended studying. I hope that you use this program to your advantage in studying for the final.\n\n-Plourde27 Programming", 10, 150, 550, 600);
+            textAlign(CENTER, CENTER);
+            textSize(20);
+            text("Click to return to the menu", 300, 500);
+            if (clicked) {
+                scene = "Menu";
+            }
+            break;
+        case "Vocabulary":
+            cursor(ARROW);
+            goodBackground();
+            fill(0, 0, 0, 195);
+            rect(300, 50, 600, 100);
+
+            textAlign(LEFT, TOP);
+            stroke(0, 0, 0);
+            strokeWeight(1);
+            line(120, 100, 120, 600);
+            line(300, 100, 300, 600);
+            fill(0, 0, 0);
+            textSize(30);
+            pushMatrix();
+            translate(0, scroll);
+            for (var i = 0 ; i < characters.length ; i++) {
+                line(0, 100 + i * 40, 600, 100 + i * 40);
+                textSize(30);
+                text(characters[i], 20, 105 + i * 40);
+                textSize(25);
+                text(pinyin[i], 140, 103.75 + i * 40);
+                textSize(15);
+                if (english[i].length < 34) {
+                    textAlign(LEFT, CENTER);
+                    text(english[i], 320, 120 + i * 40);
+                    textAlign(LEFT, TOP);
+                }
+                else {
+                    text(english[i], 320, 102.5 + i * 40, 200, 100);
+                }
+                drawStar(540, 120 + i * 40, starred[i]);
+                if (mouseY > 100 && mouseY - scroll > 100 + i * 40 && mouseY - scroll < 140 + i * 40 && mouseX > 520 && mouseX < 560) {
+                    cursor(HAND);
+                    var found = false;
+                    var starind;
+                    for (var j = 0 ; j < starredCharacters.length ; j++) {
+                        if (starredCharacters[j] === characters[i]) {
+                            found = true;
+                            starind = j;
+                        }
+                    }
+                    if (clicked && found) {
+                        starredCharacters.splice(starind, 1);
+                        starredEnglish.splice(starind, 1);
+                        starredPinyin.splice(starind, 1);
+                        starred[i] = false;
+                    }
+                    if (clicked && !found) {
+                        starredCharacters.push(characters[i]);
+                        starredEnglish.push(english[i]);
+                        starredPinyin.push(pinyin[i]);
+                        starred[i] = true;
+                    }
+                }
+            }
+            textAlign(CENTER, CENTER);
+
+            noStroke();
+            popMatrix();
+            fill(255, 255, 255);
+            textSize(50);
+            text("Vocabulary", 300, 40);
+            textSize(20);
+            text("Use arrow keys or buttons to scroll", 300, 80);
+            if (keys[UP] && scroll < 0) {
+                scroll += 4.5;
+            }
+            if (keys[DOWN] && scroll > english.length * -40 + 500) {
+                scroll -= 4.5;
+            }
+            fill(125, 125, 125);
+            if (mouseX > 30 && mouseX < 130 && mouseY > 30 && mouseY < 70) {
+                fill(155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Menu";
+                }
+            }
+            rect(80, 50, 100, 40, 10);
+
+            textSize(20);
+            fill(255, 0, 0);
+            text("Back", 80, 50);
+
+            if (scroll < 0) {
+                fill(0, 0, 0);
+                rect(300, 115, 60, 30);
+                fill(255, 255, 255);
+                triangle(290, 125, 300, 105, 310, 125);
+            }
+            if (scroll > english.length * -40 + 500) {
+                fill(0, 0, 0);
+                rect(300, 585, 60, 30);
+                fill(255, 255, 255);
+                triangle(290, 575, 300, 595, 310, 575);
+            }
+            if (mouseX > 270 && mouseX < 330) {
+                if (mouseY > 100 && mouseY < 130 && scroll < 0) {
+                    cursor(HAND);
+                    if (mip) {
+                        scroll += 4.5;
+                    }
+                }
+                if (mouseY > 570 && mouseY < 600 && scroll > english.length * -40 + 500) {
+                    cursor(HAND);
+                    if (mip) {
+                        scroll -= 4.5;
+                    }
+                }
+            }
+            break;
+        case "ObscureList":
+            cursor(ARROW);
+            goodBackground();
+            fill(0, 0, 0, 195);
+            rect(300, 50, 600, 100);
+
+            textAlign(LEFT, TOP);
+            stroke(0, 0, 0);
+            strokeWeight(1);
+            line(120, 100, 120, 600);
+            line(300, 100, 300, 600);
+            line(500, 100, 500, 600);
+            fill(0, 0, 0);
+            textSize(30);
+            pushMatrix();
+            translate(0, scroll);
+            for (var i = 0 ; i < chiA.length ; i++) {
+                line(0, 100 + i * 40, 600, 100 + i * 40);
+                textSize(27);
+                text(chiA[i], 20, 103.75 + i * 40);
+                textSize(25);
+                text(pinA[i], 140, 103.75 + i * 40);
+                textSize(15);
+                if (engA[i].length < 34) {
+                    textAlign(LEFT, CENTER);
+                    text(engA[i], 320, 120 + i * 40);
+                    textAlign(LEFT, TOP);
+                }
+                else {
+                    text(engA[i], 320, 102.5 + i * 40, 150, 100);
+                }
+                textSize(18);
+                text(atis[i] + " / 10 TIL", 505, 106 + i * 40);
+
+            }
+            textAlign(CENTER, CENTER);
+
+            noStroke();
+            popMatrix();
+            fill(255, 255, 255);
+            textSize(30);
+            text("Advanced Vocabulary", 300, 40);
+            textSize(20);
+            text("Use arrow keys or buttons to scroll", 300, 80);
+            if (keys[UP] && scroll < 0) {
+                scroll += 4.5;
+            }
+            if (keys[DOWN] && scroll > engA.length * -40 + 500) {
+                scroll -= 4.5;
+            }
+            fill(125, 125, 125);
+            if (mouseX > 30 && mouseX < 130 && mouseY > 30 && mouseY < 70) {
+                fill(155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Menu";
+                }
+            }
+            rect(80, 50, 100, 40, 10);
+
+            textSize(20);
+            fill(255, 0, 0);
+            text("Back", 80, 50);
+
+            if (scroll < 0) {
+                fill(0, 0, 0);
+                rect(300, 115, 60, 30);
+                fill(255, 255, 255);
+                triangle(290, 125, 300, 105, 310, 125);
+            }
+            if (scroll > engA.length * -40 + 500) {
+                fill(0, 0, 0);
+                rect(300, 585, 60, 30);
+                fill(255, 255, 255);
+                triangle(290, 575, 300, 595, 310, 575);
+            }
+            if (mouseX > 270 && mouseX < 330) {
+                if (mouseY > 100 && mouseY < 130 && scroll < 0) {
+                    cursor(HAND);
+                    if (mip) {
+                        scroll += 4.5;
+                    }
+                }
+                if (mouseY > 570 && mouseY < 600 && scroll > engA.length * -40 + 500) {
+                    cursor(HAND);
+                    if (mip) {
+                        scroll -= 4.5;
+                    }
+                }
+            }
+            break;
+        case "TestStart":
+            cursor(ARROW);
+            goodBackground();
+            fill(0, 0, 0);
+            textSize(50);
+            text("You will be given\na 40 question test,\nbroken up into 4\nparts.", 300, 180);
+            textSize(20);
+            text("Click to continue", 300, 500);
+            if (clicked) {
+                scene = "Test";
+                testScene = 0;
+                frameCount = 0;
+            }
+            break;
+        case "Test":
+            fill(0, 0, 0);
+            cursor(ARROW);
+            goodBackground();
+            textSize(50);
+            fill(0, 0, 0);
+            text("Question " + (testScene + 1), 300, 80);
+            textSize(20);
+
+            textSize(28);
+            if (testScene < 20) {
+                textAlign(LEFT, TOP);
+            }
+            text(questions[testScene], 10, 210, 580, 100);
+
+            textAlign(CENTER, CENTER);
+
+            var testInd2;
+            if (testScene !== prevTestScene) {
+                var optionsInds = [inds[testScene]];
+
+                if (testScene < 10) {
+                    text("Translate the following sentence into English:", 300, 140);
+                    options = [part1answers[inds[testScene]]];
+                }
+                else if (testScene < 20) {
+                    text("Translate the following sentence into Chinese:", 300, 140);
+                    options = [part1questions[inds[testScene]]];
+                }
+                else if (testScene < 30) {
+                    text("Translate the following character(s) into English:", 300, 140);
+                    options = [english[inds[testScene]]];
+                }
+                else {
+                    text("Translate the following character(s) into Chinese:", 300, 140);
+                    options = [characters[inds[testScene]]];
+                }
+                for (var i = 0 ; i < 3 ; i++) {
+                    var found = false;
+                    while (found === false) {
+                        testInd2 = round(random(-0.4, part1questions.length - 0.6));
+                        if (testScene >= 20) {
+                            testInd2 = round(random(-0.4, english.length - 0.6));
+                        }
+                        var ff = false;
+                        for (var j = 0 ; j < optionsInds.length ; j++) {
+                            if (testInd2 === optionsInds[j]) {
+                                ff = true;
+                            }
+                        }
+                        if (!ff) {
+                            found = true;
+                            optionsInds.push(testInd2);
+                            if (testScene < 10) {
+                                options.push(part1answers[testInd2]);
+                            }
+                            else if (testScene < 20) {
+                                options.push(part1questions[testInd2]);
+                            }
+                            else if (testScene < 30) {
+                                options.push(english[testInd2]);
+                            }
+                            else {
+                                options.push(characters[testInd2]);
+                            }
+                        }
+                    }
+                }
+                var options2 = [[options[0], 0], [options[1], 1], [options[2], 2], [options[3], 3]];
+                options = options2;
+                options = shuffle(options);
+            }
+            if (testScene < 10) {
+                text("Translate the following sentence into English:", 300, 140);
+            }
+            else if (testScene < 20) {
+                text("Translate the following sentence into Chinese:", 300, 140);
+            }
+            else if (testScene < 30) {
+                text("Translate the following character(s) into English:", 300, 140);
+            }
+            else {
+                text("Translate the following character(s) into Chinese:", 300, 140);
+            }
+            fill(125, 125, 125, 155);
+            noStroke();
+            prevTestScene = testScene;
+            if (mouseX > 85 && mouseX < 235 && mouseY > 320 && mouseY < 380) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    textFrame = 255;
+                    testScene++;
+                    if (options[0][1] === 0) {
+                        answer = 1;
+                        correct ++;
+                        if (frameCount < 500) {
+                            points += 5 + Math.floor((500 - frameCount) / 100) + 1;
+                        }
+                        else {
+                            points += 5;
+                        }
+                    }
+                    else {
+                        answer = 0;
+                    }
+                    frameCount = 0;
+                }
+            }
+            rect(160, 350, 170, 70, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 365 && mouseX < 515 && mouseY > 320 && mouseY < 380) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    textFrame = 255;
+                    testScene++;
+                    if (options[1][1] === 0) {
+                        answer = 1;
+                        correct ++;
+                        if (frameCount < 500) {
+                            points += 5 + Math.floor((500 - frameCount) / 100) + 1;
+                        }
+                        else {
+                            points += 5;
+                        }
+                    }
+                    else {
+                        answer = 0;
+                    }
+
+                    frameCount = 0;
+                }
+            }
+            rect(440, 350, 170, 70, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 85 && mouseX < 235 && mouseY > 420 && mouseY < 480) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    testScene++;
+                    textFrame = 255;
+                    if (options[2][1] === 0) {
+                        answer = 1;
+                        correct ++;
+                        if (frameCount < 500) {
+                            points += 5 + Math.floor((500 - frameCount) / 100) + 1;
+                        }
+                        else {
+                            points += 5;
+                        }
+                    }
+                    else {
+                        answer = 0;
+                    }
+                    frameCount = 0;
+                }
+            }
+            rect(160, 450, 170, 70, 20);
+            fill(125, 125, 125, 155);
+            if (mouseX > 365 && mouseX < 515 && mouseY > 420 && mouseY < 480) {
+                fill(155, 155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    textFrame = 255;
+                    testScene++;
+
+                    if (options[3][1] === 0) {
+                        answer = 1;
+                        if (frameCount < 500) {
+                            points += 5 + Math.floor((500 - frameCount) / 100) + 1;
+                        }
+                        else {
+                            points += 5;
+                        }
+                        correct ++;
+                    }
+                    else {
+                        answer = 0;
+                    }
+                    frameCount = 0;
+                }
+            }
+            rect(440, 450, 170, 70, 20);
+            fill(0, 0, 0);
+            textAlign(LEFT, TOP);
+            fill(0, 0, 0);
+            textSize(20);
+            text("Points: " + points, 10, 10);
+            textSize(12);
+            if (testScene >= 20) {
+                textSize(15);
+            }
+            if (testScene >= 30) {
+                textSize(30);
+            }
+
+
+
+            fill(55, 0, 0);
+            text(options[0][0], 85, 320, 160, 60);
+            fill(0, 100, 0);
+            text(options[1][0], 365, 320, 160, 60);
+            fill(0, 0, 100);
+            text(options[2][0], 85, 420, 160, 60);
+            fill(100, 100, 0);
+            text(options[3][0], 365, 420, 160, 60);
+            textAlign(CENTER, CENTER);
+            if (textFrame > 0) {
+                textFrame -= 10;
+            }
+            if (answer) {
+                stroke(0, 255, 0, textFrame);
+                strokeWeight(80);
+                noFill();
+                beginShape();
+                vertex(100, 300);
+                vertex(300, 500);
+                vertex(500, 100);
+                endShape();
+                noStroke();
+                strokeWeight(2);
+            }
+            else {
+                fill(255, 0, 0, textFrame);
+                textSize(500);
+                text("X", 300, 300);
+            }
+            if (testScene >= 40) {
+                scene = "Results";
+            }
+            break;
+        case "Results":
+            cursor(ARROW);
+            if (pts < points) {
+                pts += 5;
+            }
+            if (pts > points) {
+                pts = points;
+            }
+            goodBackground();
+            textSize(50);
+            fill(0, 0, 0);
+            text("Congratulations!", 300, 80);
+            textSize(30);
+            text("Your points on the test:", 300, 150);
+            fill(0, 255, 0, 125);
+            textSize(100);
+            text(pts, 300, 300);
+            textSize(20);
+            fill(0, 0, 0);
+            text("(Out of a maximum of 400 points)", 300, 400);
+            text("Click to return to menu", 300, 500);
+            if (clicked) {
+                scene = "Menu";
+                points = 0;
+                textFrame = 0;
+            }
+            break;
+        case "ObscureStart":
+            goodBackground();
+            fill(0, 0, 0);
+            textFont(createFont("Skia"));
+            textSize(55);
+            text("SPEAKING PRACTICE", 300, 80);
+            textSize(20);
+            textFont(createFont("Avenir"));
+            textAlign(LEFT, TOP);
+            text("This will give you a test to help you learn obscure characters (not in the textbook) that may be important on the speaking portion of the final.\nEach character has been taken as notes during class, and has been marked with a Test Importance Level (TIL) from 1 to 10, with 1 being the least important. You can select if you only want to learn the most important characters, or a mix.", 30, 160, 540, Infinity);
+            textAlign(CENTER, CENTER);
+            text("Select Minimum TIL:", 120, 430);
+            text("Select Question Count:", 120, 490);
+            for (var i = 0 ; i < oops.length ; i++) {
+                stroke(55, 55, 55);
+                strokeWeight(10);
+                line(280, 430 + i * 60, 560, 430 + i * 60);
+                if (mouseX >= 280 && mouseX < 560 && mouseY > 410 + i * 60 && mouseY < 450 + i * 60) {
+                    cursor(HAND);
+                    if (mip) {
+                        mouseSel[i] = ((mouseX - 280) / (280 / (oops[i].length - 1))).toFixed(0);
+                    }
+                }
+                fill(200, 200, 200);
+                noStroke();
+                ellipse(280 + (280 / (oops[i].length - 1)) * mouseSel[i], 430 + i * 60, 40, 40);
+                fill(0, 0, 0);
+                textSize(20);
+                text(oops[i][mouseSel[i]], 280 + (280 / (oops[i].length - 1)) * mouseSel[i], 430 + i * 60);
+            }
+            fill(200, 200, 200, 120);
+            rect(300, 560, 300, 40, 5);
+            fill(0, 0, 0);
+            textSize(25);
+            text("Go", 300, 560);
+            if (mouseX > 150 && mouseX < 450 && mouseY > 540 && mouseY < 580) {
+                cursor(HAND);
+                if (clicked) {
+                    scene = "ObscureChar";
+                    screenT = 0;
+                    corCount = 0;
+                    stc = false;
+                    qNum = 0;
+                    minTil = oops[0][mouseSel[0]];
+                    questionCount = oops[1][mouseSel[1]];
+                }
+            }
+            break;
+        case "ObscureChar":
+            goodBackground();
+            if (!stc) {
+                setChar();
+                qNum += 1;
+                stc = true;
+            }
+            fill(0, 0, 0);
+            textFont(createFont("Skia"));
+            textSize(60);
+            text("QUESTION " + qNum, 300, 60);
+            textFont(createFont("Avenir"));
+            textSize(22);
+            textAlign(LEFT, TOP);
+            text("Choose the " + cwd[sched[1] - 1] + " of the following " + cwd[sched[0] - 1] + ":", 60, 100, 520, Infinity);
+            textSize(60);
+            textAlign(CENTER, CENTER);
+            text(allA[sched[0] - 1][questionArr[questionInd]], 300, 200);
+            noStroke();
+
+            for (var i = 0 ; i < questionArr.length ; i++) {
+                if (mouseX > 30 && mouseX < 570 && mouseY > 245 + i * 60 && mouseY < 295 + i * 60) {
+                    cursor(HAND);
+                    translate(300, 270 + i * 60);
+                    scale(1.2);
+                    translate(-300, -270 - i * 60);
+                    if (clicked) {
+                        screenT = 255;
+                        fino = true;
+                        if (i === questionInd) {
+                            cor = true;
+                            corCount += 1;
+                            incorind = -1;
+                        }
+                        else {
+                            cor = false;
+                            incorind = i;
+                        }
+
+                    }
+                }
+                fill(200, 200, 200, 100);
+                if (fino && i === questionInd) {
+                    fill(0, 200, 0, 200);
+                }
+                if (fino && i === incorind) {
+                    fill(200, 0, 0, 200);
+                }
+                rect(300, 270 + i * 60, 540, 50, 5);
+                fill(0, 0, 0);
+                textSize(25);
+                text(allA[sched[1] - 1][questionArr[i]], 300, 270 + i * 60);
+                resetMatrix();
+            }
+            if (fino) {
+                fill(200, 200, 200, 120);
+                rect(300, 560, 300, 40, 5);
+                fill(0, 0, 0);
+                textSize(25);
+                text("Next", 300, 560);
+                if (mouseX > 150 && mouseX < 450 && mouseY > 540 && mouseY < 580) {
+                    cursor(HAND);
+                    if (clicked) {
+                        stc = false;
+                        fino = false;
+                        if (qNum >= questionCount) {
+                            scene = "ObscureFinish";
+                            score = ((corCount / questionCount) * 100).toFixed(0);
+                        }
+                    }
+                }
+            }
+            if (cor) {
+                fill(0, 200, 0, screenT);
+            }
+            else {
+                fill(200, 0, 0, screenT);
+            }
+            rect(300, 300, 600, 600);
+            screenT -= 10;
+            break;
+        case "ObscureFinish":
+            goodBackground();
+            textFont(createFont("Skia"));
+            textSize(60);
+            fill(0, 0, 0);
+            text("YOU'VE FINISHED!", 300, 60);
+
+            textSize(40);
+            text("Your Score:", 300, 150);
+            fill(255 - scoreColors[Math.floor(score / 5)], scoreColors[Math.floor(score / 5)], 0);
+            textSize(320);
+            textFont(createFont("monospace"));
+            text(score + "%", 300, 340);
+            textFont(createFont("Avenir"));
+            fill(200, 200, 200, 120);
+            noStroke();
+            rect(150, 560, 200, 40, 5);
+            rect(450, 560, 200, 40, 5);
+            fill(0, 0, 0);
+            textSize(25);
+            text("Back", 150, 560);
+            text("New Test", 450, 560);
+            if (mouseX > 50 && mouseX < 250 && mouseY > 540 && mouseY < 580) {
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Menu";
+                }
+            }
+            if (mouseX > 350 && mouseX < 550 && mouseY > 540 && mouseY < 580) {
+                cursor(HAND);
+                if (clicked) {
+                    scene = "ObscureStart";
+                }
+            }
+            break;
+        case "StartCharacter":
+
+            goodBackground();
+            fill(125, 125, 125);
+            if (mouseX > 30 && mouseX < 130 && mouseY > 30 && mouseY < 70) {
+                fill(155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Menu";
+                }
+            }
+            else {
+                if (clicked) {
+                    scene = "Write";
+                }
+            }
+            rect(80, 50, 100, 40, 10);
+
+            textSize(20);
+            fill(255, 0, 0);
+            text("Back", 80, 50);
+
+            fill(0, 0, 0);
+            textSize(40);
+            text("Write out the Chinese\ncharacter of this pinyin:", 300, 140);
+            textAlign(CENTER, CENTER);
+            textSize(100);
+            text(ch, 300, 300);
+            textSize(30);
+            text("(" + english[pinyin.indexOf(ch)] + ")", 300, 380);
+            textSize(20);
+            text("Click to continue", 300, 550);
+
+            break;
+        case "Write":
+            cursor(ARROW);
+            background(255, 255, 255);
+            stroke(0, 0, 0);
+            strokeWeight(20);
+            noFill();
+            for (var i = 0 ; i < nodes.length ; i++) {
+                beginShape();
+                for (var j = 0 ; j < nodes[i].length ; j++) {
+                    vertex(nodes[i][j][0], nodes[i][j][1]);
+                }
+                endShape();
+            }
+            fill(125, 125, 125);
+            strokeWeight(2);
+            if (mouseX > 30 && mouseX < 130 && mouseY > 30 && mouseY < 70) {
+                fill(155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    nodes = [[]];
+                }
+            }
+            noStroke();
+            rect(80, 50, 100, 40, 10);
+            fill(125, 125, 125);
+            if (mouseX > 470 && mouseX < 570 && mouseY > 30 && mouseY < 70) {
+                fill(155, 155, 155);
+                cursor(HAND);
+                if (clicked) {
+                    scene = "Compare";
+                    frameCount = 0;
+                }
+            }
+
+            rect(520, 50, 100, 40, 10);
+
+            textSize(40);
+            fill(255, 0, 0);
+            text("X", 80, 50);
+            stroke(0, 200, 50);
+            strokeWeight(5);
+            noFill();
+            beginShape();
+            vertex(510, 50);
+            vertex(520, 60);
+            vertex(540, 40);
+            endShape();
+            fill(0, 0, 0);
+            textSize(20);
+            text("Drag the mouse to write the\nchinese character of\n" + ch + " (" + english[pinyin.indexOf(ch)] + ")", 300, 50);
+            break;
+        case "Compare":
+            cursor(ARROW);
+            background(255, 255, 255);
+            textSize(65);
+            text("Results", 300, 100);
+            textSize(30);
+            if (frameCount > 40) {
+                fill(0, 0, 0);
+                text("Your Character:", 150, 200);
+
+            }
+            if (frameCount > 80) {
+                noStroke();
+                fill(200, 200, 200);
+                rect(150, 350, 250, 250, 5);
+                stroke(0, 0, 0);
+                strokeWeight(20 * 250 / 600);
+                noFill();
+                for (var i = 0 ; i < nodes.length ; i++) {
+                    beginShape();
+                    for (var j = 0 ; j < nodes[i].length ; j++) {
+                        vertex(nodes[i][j][0] * 250 / 600 + 25, nodes[i][j][1] * 250 / 600 + 225);
+                    }
+                    endShape();
+                }
+            }
+            if (frameCount > 120) {
+                fill(0, 0, 0);
+                text("Target Character:", 450, 200);
+            }
+            if (frameCount > 160) {
+                noStroke();
+                fill(200, 200, 200);
+                rect(450, 350, 250, 250, 5);
+                fill(0, 0, 0);
+                textSize(125);
+                text(characters[pinyin.indexOf(ch)], 450, 350);
+            }
+            if (frameCount > 200) {
+                fill(125, 125, 125);
+                noStroke();
+                if (mouseX > 250 && mouseX < 350 && mouseY > 530 && mouseY < 570) {
+                    fill(155, 155, 155);
+                    cursor(HAND);
+                    if (clicked) {
+                        done = false;
+                        scene = "StartCharacter";
+                        ind = round(random(-0.4, pinyin.length  - 0.6));
+                        ch = pinyin[ind];
+                        if (starredScene) {
+                            ch = starredPinyin[round(random(-0.4, starredPinyin.length - 0.6))];
+                            scene = "StarredCharacters";
+                        }
+                        nodes = [];
+                    }
+                }
+                rect(300, 550, 100, 40, 10);
+                fill(125, 125, 125);
+                if (mouseX > 50 && mouseX < 150 && mouseY > 530 && mouseY < 570) {
+                    fill(155, 155, 155);
+                    cursor(HAND);
+                    if (clicked && !starredScene && !done) {
+                        starredCharacters.push(characters[pinyin.indexOf(ch)]);
+                        starredPinyin.push(ch);
+                        starredEnglish.push(english[pinyin.indexOf(ch)]);
+                        starred[pinyin.indexOf(ch)] = true;
+                    }
+                    if (clicked && starredScene && !done) {
+                        starredCharacters.splice(starredPinyin.indexOf(ch), 1);
+                        starredEnglish.splice(starredPinyin.indexOf(ch), 1);
+                        starredPinyin.splice(starredPinyin.indexOf(ch), 1);
+                        starred[pinyin.indexOf(ch)] = false;
+                    }
+                    if (clicked) {
+                        done = true;
+                    }
+                }
+                if (done) {
+                    noFill();
+                }
+                rect(100, 550, 100, 40, 10);
+                fill(125, 125, 125);
+                if (mouseX > 450 && mouseX < 550 && mouseY > 530 && mouseY < 570) {
+                    cursor(HAND);
+                    fill(155, 155, 155);
+                    if (clicked) {
+                        scene = "StartCharacter";
+                        nodes= [];
+                    }
+                }
+                rect(500, 550, 100, 40, 10);
+                fill(0, 0, 0);
+                textSize(20);
+                text("Continue", 300, 550);
+                if (!starredScene && !done) {
+                    text("Star", 100, 550);
+                }
+                else if (!done) {
+                    text("Un-star", 100, 550);
+                }
+                text("Re-do", 500, 550);
+            }
+
+    }
+    fill(0, 0, 0);
+    textSize(300);
+    clicked = false;
+
+};
+
+
+
+    		}
+    	};
+    	}
+
+    	var canvas = document.getElementById("game");
+    	var processingInstance = new Processing(canvas, programCode);
+    </script>
+</html>
